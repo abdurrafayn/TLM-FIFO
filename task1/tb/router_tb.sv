@@ -1,10 +1,7 @@
 class router_tb extends uvm_env;
     
-`uvm_component_utils(router_tb)
-    function new(string name ="router_tb", uvm_component parent);
-        super.new(name, parent);
-    endfunction: new
-    
+    `uvm_component_utils(router_tb)
+   
     // multiple UVCs (handles of UVCs)
     yapp_env environment;
     channel_env channel_0;
@@ -18,6 +15,10 @@ class router_tb extends uvm_env;
     //router_scoreboard scoreboard;
 
     router_module_env yapp_module_env;
+
+    function new(string name ="router_tb", uvm_component parent);
+        super.new(name, parent);
+    endfunction: new
 
     function void build_phase(uvm_phase phase);
     
