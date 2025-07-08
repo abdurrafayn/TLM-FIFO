@@ -2,7 +2,8 @@ class router_reference extends uvm_component;
         
     `uvm_component_utils(router_reference)
 
-    uvm_analysis_port #(yapp_packet) yapp_to_ref; //one analysis port object for the valid YAPP packets, for output data to the scb
+    uvm_analysis_port #(yapp_packet) yapp_to_ref; 
+    //one analysis port object for the valid YAPP packets, for output data to the scb
 
     //two analysis imp objects for the YAPP and HBUS monitor analysis ports
         `uvm_analysis_imp_decl(_yapp_reference) 
@@ -13,8 +14,8 @@ class router_reference extends uvm_component;
         
         //variables to mirror the maxpktsize and router_en register fields of the router
 
-        bit [7:0] max_packet_size;
-        bit [7:0] router_en;
+        int max_packet_size;
+        int router_en;
 
         int drop_due_to_size     = 0;
         int drop_due_to_disable  = 0;
@@ -36,7 +37,7 @@ class router_reference extends uvm_component;
             yapp_packet p_copy;
             
             $cast(p_copy,pkt.clone());
-            if((p_copy.length <= max_packet_size) && (p_copy.addr < 3) && (router_en[0] == 1))
+            if((p_copy.length <= max_packet_size) && (router_en))
                 yapp_to_ref.write(p_copy);
                 else 
                     `uvm_info(get_type_name(), $sformatf("packet with illegal address %0d recevied", p_copy.addr), UVM_LOW)
@@ -48,7 +49,7 @@ class router_reference extends uvm_component;
         if(trans.hwr_rd == HBUS_WRITE) begin
             case(trans.haddr)
                 16'h1000: max_packet_size = trans.hdata;
-                16'h1001: router_en = trans.hdata;
+                16'h1001: router_en = 1;
                default: `uvm_info(get_type_name(), $sformatf("Invalid address %0h received", trans.haddr), UVM_LOW)
             endcase
         end
