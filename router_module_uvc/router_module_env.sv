@@ -10,12 +10,12 @@ class router_module_env extends uvm_env;
 
 
         router_scoreboard_new yapp_router_scb;
-        router_reference yapp_router_ref;
+        //router_reference yapp_router_ref;
 
     function new (string name, uvm_component parent);
         super.new(name,parent);        
 
-          yapp_packet_in_export = new("yapp_packet_in_export", this);
+        yapp_packet_in_export = new("yapp_packet_in_export", this);
         chan0_packet_export = new("chan0_packet_export", this);
         chan1_packet_export = new("chan1_packet_export", this);
         chan2_packet_export = new("chan2_packet_export", this);
@@ -28,7 +28,7 @@ class router_module_env extends uvm_env;
         super.build_phase(phase);
 
         yapp_router_scb = router_scoreboard_new::type_id::create("yapp_router_scb", this);
-        yapp_router_ref = router_reference::type_id::create("yapp_router_ref", this);
+        //yapp_router_ref = router_reference::type_id::create("yapp_router_ref", this);
         
     endfunction
 
@@ -38,7 +38,7 @@ class router_module_env extends uvm_env;
         chan0_packet_export.connect(yapp_router_scb.channel_fifo_0.analysis_export);
         chan1_packet_export.connect(yapp_router_scb.channel_fifo_1.analysis_export);
         chan2_packet_export.connect(yapp_router_scb.channel_fifo_2.analysis_export);
-        
+
         yapp_packet_in_export.connect(yapp_router_scb.yapp_fifo_new.analysis_export);
         hbus_packet_export.connect(yapp_router_scb.hbus_fifo_new.analysis_export);
 
